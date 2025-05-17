@@ -16,22 +16,22 @@
  * along with StateMachine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.npg.state.impl;
+package net.npg.state;
 
-import net.npg.state.State;
-import net.npg.state.StateModel;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static net.npg.state.Ids.ID1;
+import static net.npg.state.Ids.MODEL_ID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ConcreteTokenTest {
+class TokenTest {
 
     /**
-     * Tests the update functionality of the ConcreteToken class.
+     * Tests the update functionality of the Token class.
      * Ensures that the token can update its state with a valid new state.
      * Also validates that exceptions are thrown for invalid cases such as
      * null new state or a state not part of the model.
@@ -46,7 +46,7 @@ class ConcreteTokenTest {
 
         when(model.states()).thenReturn(List.of(initialState, newState));
 
-        final ConcreteToken<String> token = new ConcreteToken<>(initialState, model);
+        final Token<String> token = new Token<>(initialState, model);
 
         // Act
         final var updatedToken = token.update(newState);
@@ -66,7 +66,7 @@ class ConcreteTokenTest {
 
         when(model.states()).thenReturn(List.of(initialState));
 
-        final ConcreteToken<String> token = new ConcreteToken<>(initialState, model);
+        final Token<String> token = new Token<>(initialState, model);
 
         // Act & Assert
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> token.update(newState));
@@ -81,7 +81,7 @@ class ConcreteTokenTest {
 
         when(model.states()).thenReturn(List.of(initialState));
 
-        final ConcreteToken<String> token = new ConcreteToken<>(initialState, model);
+        final Token<String> token = new Token<>(initialState, model);
 
         // Act & Assert
         assertThrows(NullPointerException.class, () -> token.update(null));
@@ -89,9 +89,9 @@ class ConcreteTokenTest {
 
     @Test
     void testToString() {
-        final var state = new ConcreteState<>(new SimpleIdentifier("state1"));
-        final var model = new ConcreteStateModel<>(new SimpleIdentifier("model_id1"));
-        final var token = new ConcreteToken<>(state, model);
+        final var state = new State<>(ID1);
+        final var model = new StateModel<>(MODEL_ID);
+        final var token = new Token<>(state, model);
         assertTrue(token.toString().contains("state1"), "Token toString should contain state name:" + token);
     }
 }

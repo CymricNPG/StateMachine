@@ -18,17 +18,43 @@
 
 package net.npg.state;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
-public interface StateModel<I> {
-    I id();
+public record StateModel<I>(
+        I id,
+        Collection<State<I>> states,
+        Collection<Transition<I>> transitions
+) {
 
-    Collection<State<I>> states();
+    public StateModel(final I id) {
+        this(id, new ArrayList<>(), new ArrayList<>());
+    }
 
-    Collection<Transition<I>> transitions();
+    public State<I> addState(final I id) {
+        final var state = new State<>(id);
+        states.add(Objects.requireNonNull(state));
+        return state;
+    }
 
-    void addState(final State<I> state);
+    public Transition<I> addTransition(final State<I> fromState, final State<I> toState, final BooleanSupplier guard, final I transitionId) {
+        Objects.requireNonNull(fromState);
+        Objects.requireNonNull(toState);
+        Objects.requireNonNull(guard);
+        Objects.requireNonNull(transitionId);
+        final var transition = new Transition<>(transitionId, fromState, toState, guard);
+        fromState.addOutgoingTransition(transition);
+        toState.addIncomingTransition(transition);
+        transitions().add(transition);
+        return transition;
+    }
 
-    void addTransition(final State<I> fromState, State<I> toState, BooleanSupplier guard, I transitionId);
+    @Override
+    public String toString() {
+        return "StateModel{" +
+                "id=" + id +
+                '}';
+    }
 }

@@ -18,16 +18,31 @@
 
 package net.npg.state;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
-public interface State<I> {
-    I id();
+public record State<I>(
+        I id,
+        Collection<Transition<I>> outgoingTransitions,
+        Collection<Transition<I>> incomingTransitions
+) {
+    public State(final I id) {
+        this(Objects.requireNonNull(id), new ArrayList<>(), new ArrayList<>());
+    }
 
-    Collection<Transition<I>> outgoingTransitions();
+    public void addOutgoingTransition(final Transition<I> transition) {
+        outgoingTransitions.add(Objects.requireNonNull(transition));
+    }
 
-    Collection<Transition<I>> incomingTransitions();
+    public void addIncomingTransition(final Transition<I> transition) {
+        incomingTransitions.add(Objects.requireNonNull(transition));
+    }
 
-    void addOutgoingTransition(Transition<I> transition);
-
-    void addIncomingTransition(Transition<I> transition);
+    @Override
+    public String toString() {
+        return "State{" +
+                "id=" + id +
+                '}';
+    }
 }

@@ -18,6 +18,33 @@
 
 package net.npg.state;
 
-public interface StateMachine<I> {
-    Token<I> execute(Token<I> token);
+import java.util.Objects;
+
+public class StateMachine<I> {
+
+    public Token<I> execute(final Token<I> token) {
+        Objects.requireNonNull(token);
+        System.out.println("Starting execution from state: " + token.state());
+        var workToken = token;
+        while (true) {
+            // Check for enabled transitions
+            final var enabledTransitions = workToken.state().outgoingTransitions()
+                    .stream()
+                    .filter(Transition::canTraverse)
+                    .toList();
+
+            if (enabledTransitions.isEmpty()) {
+                System.out.println("No more transitions enabled from state: " + workToken.state());
+                return workToken;
+            }
+            if (enabledTransitions.size() > 1) {
+                throw new IllegalStateException("Multiple transitions enabled from state: " + workToken.state());
+            }
+            final var enabledTransition = enabledTransitions.getFirst();
+            System.out.println("Transition found from state " + workToken.state() + " : " + enabledTransition);
+            final var newState = enabledTransition.target();
+            workToken = workToken.update(newState);
+            System.out.println("Moved to state: " + workToken.state());
+        }
+    }
 }

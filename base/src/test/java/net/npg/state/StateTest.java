@@ -16,18 +16,17 @@
  * along with StateMachine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.npg.state.impl;
+package net.npg.state;
 
 import org.junit.jupiter.api.Test;
 
+import static net.npg.state.Ids.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ConcreteStateTest {
-    private static final SimpleIdentifier TRANS_ID = new SimpleIdentifier("trans_id1");
-
+class StateTest {
     @Test
-    void testConcreteStateCreation_success() {
-        final var state = new ConcreteState<>(new SimpleIdentifier("state1"));
+    void testStateCreation_success() {
+        final var state = new State<>(ID1);
         assertNotNull(state.id());
         assertTrue(state.outgoingTransitions().isEmpty());
         assertTrue(state.incomingTransitions().isEmpty());
@@ -35,9 +34,9 @@ class ConcreteStateTest {
 
     @Test
     void testAddOutgoingTransition_success() {
-        final var state = new ConcreteState<>(new SimpleIdentifier("state1"));
-        final var targetState = new ConcreteState<>(new SimpleIdentifier("state2"));
-        final var transition = new ConcreteTransition<>(TRANS_ID, state, targetState, () -> true);
+        final var state = new State<>(ID1);
+        final var targetState = new State<>(ID2);
+        final var transition = new Transition<>(TRANS_ID, state, targetState, () -> true);
 
         state.addOutgoingTransition(transition);
         assertTrue(state.outgoingTransitions().contains(transition));
@@ -45,9 +44,9 @@ class ConcreteStateTest {
 
     @Test
     void testAddIncomingTransition_success() {
-        final var state = new ConcreteState<>(new SimpleIdentifier("state1"));
-        final var sourceState = new ConcreteState<>(new SimpleIdentifier("state2"));
-        final var transition = new ConcreteTransition<>(TRANS_ID, sourceState, state, () -> true);
+        final var state = new State<>(ID1);
+        final var sourceState = new State<>(ID2);
+        final var transition = new Transition<>(TRANS_ID, sourceState, state, () -> true);
 
         state.addIncomingTransition(transition);
         assertTrue(state.incomingTransitions().contains(transition));
@@ -55,7 +54,7 @@ class ConcreteStateTest {
 
     @Test
     void testAddNullOutgoingTransition_fail() {
-        final var state = new ConcreteState<>(new SimpleIdentifier("state1"));
+        final var state = new State<>(ID1);
         assertThrows(NullPointerException.class, () -> state.addOutgoingTransition(null));
     }
 }

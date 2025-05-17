@@ -16,7 +16,7 @@
  * along with StateMachine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.npg.state.impl;
+package net.npg.state;
 
 import java.util.Objects;
 

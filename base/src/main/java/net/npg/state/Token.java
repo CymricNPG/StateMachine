@@ -18,10 +18,27 @@
 
 package net.npg.state;
 
-public interface Token<I> {
-    State<I> state();
 
-    StateModel<I> model();
+import java.util.Objects;
 
-    Token<I> update(State<I> newState);
+public record Token<I>(State<I> state, StateModel<I> model) {
+    public Token {
+        Objects.requireNonNull(state, "state cannot be null");
+        Objects.requireNonNull(model, "model cannot be null");
+    }
+
+    public Token<I> update(final State<I> newState) {
+        Objects.requireNonNull(newState);
+        if (!model.states().contains(newState)) {
+            throw new IllegalArgumentException("State " + newState + " not part of model " + model);
+        }
+        return new Token<>(newState, model);
+    }
+
+    @Override
+    public String toString() {
+        return "Token{" +
+                "state=" + state +
+                '}';
+    }
 }

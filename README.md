@@ -1,5 +1,7 @@
 # StateMachine
 
+(Warning: AI Playground)
+
 A flexible and type-safe state machine implementation in Java.
 
 ## Overview
@@ -27,6 +29,7 @@ dependencies {
 ### Maven
 
 ```xml
+
 <dependency>
     <groupId>net.npg</groupId>
     <artifactId>StateMachine</artifactId>
@@ -53,17 +56,29 @@ ConcreteState<SimpleIdentifier> yellowState = new ConcreteState<>(yellowId);
 ConcreteState<SimpleIdentifier> greenState = new ConcreteState<>(greenId);
 
 // Add states to the model
-model.addState(redState);
-model.addState(yellowState);
-model.addState(greenState);
+model.
+
+addState(redState);
+model.
+
+addState(yellowState);
+model.
+
+addState(greenState);
 
 // Define transition guards
 BooleanSupplier alwaysTrue = () -> true;
 
 // Add transitions
-model.addTransition(redState, greenState, alwaysTrue, new SimpleIdentifier("redToGreen"));
-model.addTransition(greenState, yellowState, alwaysTrue, new SimpleIdentifier("greenToYellow"));
-model.addTransition(yellowState, redState, alwaysTrue, new SimpleIdentifier("yellowToRed"));
+model.
+
+addTransition(redState, greenState, alwaysTrue, new SimpleIdentifier("redToGreen"));
+        model.
+
+addTransition(greenState, yellowState, alwaysTrue, new SimpleIdentifier("greenToYellow"));
+        model.
+
+addTransition(yellowState, redState, alwaysTrue, new SimpleIdentifier("yellowToRed"));
 
 // Create a token starting at the red state
 ConcreteToken<SimpleIdentifier> token = new ConcreteToken<>(redState, model);
@@ -75,7 +90,11 @@ GuardedStateMachine<SimpleIdentifier> stateMachine = new GuardedStateMachine<>()
 Token<SimpleIdentifier> finalToken = stateMachine.execute(token);
 
 // The token should now be in the red state after going through the cycle
-System.out.println("Final state: " + finalToken.state().id());
+System.out.
+
+println("Final state: "+finalToken.state().
+
+id());
 ```
 
 ## API Documentation

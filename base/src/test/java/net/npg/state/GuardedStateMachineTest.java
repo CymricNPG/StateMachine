@@ -16,25 +16,23 @@
  * along with StateMachine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.npg.state.impl;
+package net.npg.state;
 
 import org.junit.jupiter.api.Test;
 
+import static net.npg.state.Ids.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GuardedStateMachineTest {
 
     @Test
     void testExecuteStateMachine_success() {
-        final var state1 = new ConcreteState<>(new SimpleIdentifier("state1"));
-        final var state2 = new ConcreteState<>(new SimpleIdentifier("state2"));
-
-        final var model = new ConcreteStateModel<>(new SimpleIdentifier("model_id1"));
-        model.addState(state1);
-        model.addState(state2);
-        model.addTransition(state1, state2, () -> true, new SimpleIdentifier("trans_id1"));
-        final var token = new ConcreteToken<>(state1, model);
-        final var stateMachine = new GuardedStateMachine<SimpleIdentifier>();
+        final var model = new StateModel<>(MODEL_ID);
+        final var state1 = model.addState(ID1);
+        final var state2 = model.addState(ID2);
+        model.addTransition(state1, state2, () -> true, TRANS_ID);
+        final var token = new Token<>(state1, model);
+        final var stateMachine = new StateMachine<SimpleIdentifier>();
 
         final var resultToken = stateMachine.execute(token);
 
@@ -43,15 +41,13 @@ class GuardedStateMachineTest {
 
     @Test
     void testExecuteWithNoTransition_fail() {
-        final var state1 = new ConcreteState<>(new SimpleIdentifier("state1"));
-        final var state2 = new ConcreteState<>(new SimpleIdentifier("state2"));
 
-        final var model = new ConcreteStateModel<>(new SimpleIdentifier("model_id1"));
-        model.addState(state1);
-        model.addState(state2);
-        model.addTransition(state1, state2, () -> false, new SimpleIdentifier("trans_id1"));
-        final var token = new ConcreteToken<>(state1, model);
-        final var stateMachine = new GuardedStateMachine<SimpleIdentifier>();
+        final var model = new StateModel<>(MODEL_ID);
+        final var state1 = model.addState(ID1);
+        final var state2 = model.addState(ID2);
+        model.addTransition(state1, state2, () -> false, TRANS_ID);
+        final var token = new Token<>(state1, model);
+        final var stateMachine = new StateMachine<SimpleIdentifier>();
         final var resultToken = stateMachine.execute(token);
 
         assertEquals(state1, resultToken.state());

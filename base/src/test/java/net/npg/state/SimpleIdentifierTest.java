@@ -16,32 +16,31 @@
  * along with StateMachine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.npg.state.impl;
+package net.npg.state;
 
 import org.junit.jupiter.api.Test;
 
+import static net.npg.state.Ids.ID1;
+import static net.npg.state.Ids.ID2;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SimpleIdentifierTest {
 
     @Test
     void testSimpleIdentifierCreation_success() {
-        final var id = new SimpleIdentifier("id1");
-        assertEquals("id1", id.id());
+        assertEquals("id1", new SimpleIdentifier("id1").id());
     }
 
     @Test
     void testSimpleIdentifierEquality_success() {
-        final var id1 = new SimpleIdentifier("id1");
-        final var id2 = new SimpleIdentifier("id1");
-        assertEquals(id1, id2);
+        final var ids1 = new SimpleIdentifier("id1_");
+        final var ids2 = new SimpleIdentifier("id1_");
+        assertEquals(ids1, ids2);
     }
 
     @Test
     void testSimpleIdentifierEquality_fail() {
-        final var id1 = new SimpleIdentifier("id1");
-        final var id2 = new SimpleIdentifier("id2");
-        assertNotEquals(id1, id2);
+        assertNotEquals(ID1, ID2);
     }
 
     @Test

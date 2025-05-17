@@ -18,12 +18,31 @@
 
 package net.npg.state;
 
-public interface Transition<I> {
-    I id();
+import java.util.Objects;
+import java.util.function.BooleanSupplier;
 
-    State<I> source();
+public record Transition<I>(
+        I id,
+        State<I> source,
+        State<I> target,
+        BooleanSupplier guard
+) {
 
-    State<I> target();
+    public Transition {
+        Objects.requireNonNull(id, "id must not be null");
+        Objects.requireNonNull(source, "source must not be null");
+        Objects.requireNonNull(target, "target must not be null");
+        Objects.requireNonNull(guard, "guard must not be null");
+    }
 
-    boolean canTraverse();
+    public boolean canTraverse() {
+        return guard.getAsBoolean();
+    }
+
+    @Override
+    public String toString() {
+        return "Transition{" +
+                "id=" + id +
+                '}';
+    }
 }

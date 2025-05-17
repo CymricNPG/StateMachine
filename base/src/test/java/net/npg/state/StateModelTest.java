@@ -16,45 +16,40 @@
  * along with StateMachine. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.npg.state.impl;
+package net.npg.state;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.BooleanSupplier;
 
+import static net.npg.state.Ids.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ConcreteStateModelTest {
-    private static final SimpleIdentifier MODEL_ID = new SimpleIdentifier("model_id1");
+class StateModelTest {
 
     @Test
     void testCreateEmptyStateModel_success() {
-        final var stateModel = new ConcreteStateModel<>(MODEL_ID);
+        final var stateModel = new StateModel<>(MODEL_ID);
         assertTrue(stateModel.states().isEmpty());
         assertTrue(stateModel.transitions().isEmpty());
     }
 
     @Test
     void testAddState_success() {
-        final var stateModel = new ConcreteStateModel<>(MODEL_ID);
-        final var state = new ConcreteState<>(new SimpleIdentifier("state1"));
-        stateModel.addState(state);
-
+        final var stateModel = new StateModel<>(MODEL_ID);
+        final var state = stateModel.addState(ID1);
         assertTrue(stateModel.states().contains(state));
     }
 
     @Test
     void testAddTransition_success() {
-        final var stateModel = new ConcreteStateModel<>(MODEL_ID);
-        final var state1 = new ConcreteState<>(new SimpleIdentifier("state1"));
-        final var state2 = new ConcreteState<>(new SimpleIdentifier("state2"));
-
-        stateModel.addState(state1);
-        stateModel.addState(state2);
+        final var stateModel = new StateModel<>(MODEL_ID);
+        final var state1 = stateModel.addState(ID1);
+        final var state2 = stateModel.addState(ID2);
 
         final var guard = (BooleanSupplier) () -> true;
-        stateModel.addTransition(state1, state2, guard, new SimpleIdentifier("t1"));
+        stateModel.addTransition(state1, state2, guard, TRANS_ID);
 
         assertEquals(1, stateModel.transitions().size());
         assertFalse(state1.outgoingTransitions().isEmpty());
@@ -63,20 +58,20 @@ class ConcreteStateModelTest {
 
     @Test
     void testAddNullState_fail() {
-        final var stateModel = new ConcreteStateModel<>(MODEL_ID);
+        final var stateModel = new StateModel<>(MODEL_ID);
         assertThrows(NullPointerException.class, () -> stateModel.addState(null));
     }
 
     @Test
     void testAddStateFail() {
-        final ConcreteStateModel<SimpleIdentifier> stateModel = new ConcreteStateModel<>(MODEL_ID);
+        final StateModel<SimpleIdentifier> stateModel = new StateModel<>(MODEL_ID);
 
         Assertions.assertThrows(NullPointerException.class, () -> stateModel.addState(null));
     }
 
     @Test
     void testAddTransitionFail() {
-        final ConcreteStateModel<SimpleIdentifier> stateModel = new ConcreteStateModel<>(MODEL_ID);
+        final StateModel<SimpleIdentifier> stateModel = new StateModel<>(MODEL_ID);
 
         Assertions.assertThrows(NullPointerException.class,
                 () -> stateModel.addTransition(null, null, () -> true, null));
