@@ -30,14 +30,14 @@ class ConcreteStateModelTest {
 
     @Test
     void testCreateEmptyStateModel_success() {
-        final var stateModel = new ConcreteStateModel<SimpleIdentifier>(MODEL_ID);
+        final var stateModel = new ConcreteStateModel<>(MODEL_ID);
         assertTrue(stateModel.states().isEmpty());
         assertTrue(stateModel.transitions().isEmpty());
     }
 
     @Test
     void testAddState_success() {
-        final var stateModel = new ConcreteStateModel<SimpleIdentifier>(MODEL_ID);
+        final var stateModel = new ConcreteStateModel<>(MODEL_ID);
         final var state = new ConcreteState<>(new SimpleIdentifier("state1"));
         stateModel.addState(state);
 
@@ -46,7 +46,7 @@ class ConcreteStateModelTest {
 
     @Test
     void testAddTransition_success() {
-        final var stateModel = new ConcreteStateModel<SimpleIdentifier>(MODEL_ID);
+        final var stateModel = new ConcreteStateModel<>(MODEL_ID);
         final var state1 = new ConcreteState<>(new SimpleIdentifier("state1"));
         final var state2 = new ConcreteState<>(new SimpleIdentifier("state2"));
 
@@ -63,7 +63,7 @@ class ConcreteStateModelTest {
 
     @Test
     void testAddNullState_fail() {
-        final var stateModel = new ConcreteStateModel<SimpleIdentifier>(MODEL_ID);
+        final var stateModel = new ConcreteStateModel<>(MODEL_ID);
         assertThrows(NullPointerException.class, () -> stateModel.addState(null));
     }
 
