@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Roland Spatzenegger
+ * Copyright (C) 2025 Roland Spatzenegger
  * This file is part of StateMachine.
  *
  * StateMachine is free software: you can redistribute it and/or modify
@@ -18,7 +18,6 @@
 
 package net.npg.state.impl;
 
-import net.npg.state.Identifier;
 import net.npg.state.State;
 import net.npg.state.StateModel;
 import net.npg.state.Transition;
@@ -28,7 +27,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
-public record ConcreteStateModel<I extends Identifier>(
+public record ConcreteStateModel<I>(
         I id,
         Collection<State<I>> states,
         Collection<Transition<I>> transitions

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Roland Spatzenegger
+ * Copyright (C) 2025 Roland Spatzenegger
  * This file is part of StateMachine.
  *
  * StateMachine is free software: you can redistribute it and/or modify
@@ -18,6 +18,6 @@
 
 package net.npg.state;
 
-public interface StateMachine<I extends Identifier> {
+public interface StateMachine<I> {
     Token<I> execute(Token<I> token);
 }

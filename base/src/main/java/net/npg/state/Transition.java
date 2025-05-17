@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Roland Spatzenegger
+ * Copyright (C) 2025 Roland Spatzenegger
  * This file is part of StateMachine.
  *
  * StateMachine is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 package net.npg.state;
 
-public interface Transition<I extends Identifier> {
+public interface Transition<I> {
     I id();
 
     State<I> source();

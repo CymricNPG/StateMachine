@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Roland Spatzenegger
+ * Copyright (C) 2025 Roland Spatzenegger
  * This file is part of StateMachine.
  *
  * StateMachine is free software: you can redistribute it and/or modify
@@ -18,7 +18,6 @@
 
 package net.npg.state.impl;
 
-import net.npg.state.Identifier;
 import net.npg.state.State;
 import net.npg.state.StateModel;
 import org.junit.jupiter.api.Test;
@@ -41,13 +40,13 @@ class ConcreteTokenTest {
     @Test
     void testUpdateWithValidState() {
         // Arrange
-        final State<Identifier> initialState = mock(State.class);
-        final State<Identifier> newState = mock(State.class);
-        final StateModel<Identifier> model = mock(StateModel.class);
+        final State<String> initialState = mock(State.class);
+        final State<String> newState = mock(State.class);
+        final StateModel<String> model = mock(StateModel.class);
 
         when(model.states()).thenReturn(List.of(initialState, newState));
 
-        final ConcreteToken<Identifier> token = new ConcreteToken<>(initialState, model);
+        final ConcreteToken<String> token = new ConcreteToken<>(initialState, model);
 
         // Act
         final var updatedToken = token.update(newState);
@@ -61,13 +60,13 @@ class ConcreteTokenTest {
     @Test
     void testUpdateWithStateNotInModel() {
         // Arrange
-        final State<Identifier> initialState = mock(State.class);
-        final State<Identifier> newState = mock(State.class);
-        final StateModel<Identifier> model = mock(StateModel.class);
+        final State<String> initialState = mock(State.class);
+        final State<String> newState = mock(State.class);
+        final StateModel<String> model = mock(StateModel.class);
 
         when(model.states()).thenReturn(List.of(initialState));
 
-        final ConcreteToken<Identifier> token = new ConcreteToken<>(initialState, model);
+        final ConcreteToken<String> token = new ConcreteToken<>(initialState, model);
 
         // Act & Assert
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> token.update(newState));
@@ -77,12 +76,12 @@ class ConcreteTokenTest {
     @Test
     void testUpdateWithNullState() {
         // Arrange
-        final State<Identifier> initialState = mock(State.class);
-        final StateModel<Identifier> model = mock(StateModel.class);
+        final State<String> initialState = mock(State.class);
+        final StateModel<String> model = mock(StateModel.class);
 
         when(model.states()).thenReturn(List.of(initialState));
 
-        final ConcreteToken<Identifier> token = new ConcreteToken<>(initialState, model);
+        final ConcreteToken<String> token = new ConcreteToken<>(initialState, model);
 
         // Act & Assert
         assertThrows(NullPointerException.class, () -> token.update(null));

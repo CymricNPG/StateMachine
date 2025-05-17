@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Roland Spatzenegger
+ * Copyright (C) 2025 Roland Spatzenegger
  * This file is part of StateMachine.
  *
  * StateMachine is free software: you can redistribute it and/or modify
@@ -18,14 +18,13 @@
 
 package net.npg.state.impl;
 
-import net.npg.state.Identifier;
 import net.npg.state.State;
 import net.npg.state.StateModel;
 import net.npg.state.Token;
 
 import java.util.Objects;
 
-public record ConcreteToken<I extends Identifier>(State<I> state, StateModel<I> model) implements Token<I> {
+public record ConcreteToken<I>(State<I> state, StateModel<I> model) implements Token<I> {
     public ConcreteToken {
         Objects.requireNonNull(state, "state cannot be null");
         Objects.requireNonNull(model, "model cannot be null");

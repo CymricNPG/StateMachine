@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Roland Spatzenegger
+ * Copyright (C) 2025 Roland Spatzenegger
  * This file is part of StateMachine.
  *
  * StateMachine is free software: you can redistribute it and/or modify
@@ -18,11 +18,9 @@
 
 package net.npg.state.impl;
 
-import net.npg.state.Identifier;
-
 import java.util.Objects;
 
-public record SimpleIdentifier(String id) implements Identifier {
+public record SimpleIdentifier(String id) {
     public SimpleIdentifier {
         Objects.requireNonNull(id, "id cannot be null");
     }
