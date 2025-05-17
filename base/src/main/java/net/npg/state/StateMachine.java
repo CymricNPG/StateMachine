@@ -19,12 +19,14 @@
 package net.npg.state;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class StateMachine<I> {
+    private static final Logger LOGGER = Logger.getLogger(StateMachine.class.getName());
 
     public Token<I> execute(final Token<I> token) {
         Objects.requireNonNull(token);
-        System.out.println("Starting execution from state: " + token.state());
+        LOGGER.info("Starting execution from state: " + token.state());
         var workToken = token;
         while (true) {
             // Check for enabled transitions
@@ -34,17 +36,17 @@ public class StateMachine<I> {
                     .toList();
 
             if (enabledTransitions.isEmpty()) {
-                System.out.println("No more transitions enabled from state: " + workToken.state());
+                LOGGER.info("No more transitions enabled from state: " + workToken.state());
                 return workToken;
             }
             if (enabledTransitions.size() > 1) {
                 throw new IllegalStateException("Multiple transitions enabled from state: " + workToken.state());
             }
             final var enabledTransition = enabledTransitions.getFirst();
-            System.out.println("Transition found from state " + workToken.state() + " : " + enabledTransition);
+            LOGGER.info("Transition found from state " + workToken.state() + " : " + enabledTransition);
             final var newState = enabledTransition.target();
             workToken = workToken.update(newState);
-            System.out.println("Moved to state: " + workToken.state());
+            LOGGER.info("Moved to state: " + workToken.state());
         }
     }
 }
