@@ -2,15 +2,15 @@
 
 (Warning: AI Playground)
 
-A flexible and type-safe state machine implementation in Java.
+A minimal state machine implementation in Java.
 
 ## Overview
 
-StateMachine is a library that provides a framework for implementing state machines in Java applications. It offers a clean, type-safe API for defining states, transitions, and the rules that govern state changes.
+StateMachine is a library that provides a framework for implementing state machines in Java applications. It offers a clean and easy PI for defining states,
+transitions, and the rules that govern state changes.
 
 ## Features
 
-- Type-safe state machine implementation
 - Support for guarded transitions (transitions with conditions)
 - Immutable tokens for tracking state
 - Clear separation of state machine model and execution
@@ -18,104 +18,69 @@ StateMachine is a library that provides a framework for implementing state machi
 
 ## Installation
 
-### Gradle
-
-```kotlin
-dependencies {
-    implementation("net.npg:StateMachine:1.0-SNAPSHOT")
-}
-```
-
-### Maven
-
-```xml
-
-<dependency>
-    <groupId>net.npg</groupId>
-    <artifactId>StateMachine</artifactId>
-    <version>1.0-SNAPSHOT</version>
-</dependency>
+```bash
+./gradlew assemble
 ```
 
 ## Usage
 
-Here's a simple example of how to use the StateMachine library:
+Here's a simple [example](example/src/main/java/net/npg/example/SimpleStateModel.java) of how to use the StateMachine library:
 
 ```java
-// Create a state model
-SimpleIdentifier modelId = new SimpleIdentifier("trafficLight");
-ConcreteStateModel<SimpleIdentifier> model = new ConcreteStateModel<>(modelId);
+void test() {
+    // create the model
+    final var model = new StateModel<>("State Diagram");
 
-// Create states
-SimpleIdentifier redId = new SimpleIdentifier("red");
-SimpleIdentifier yellowId = new SimpleIdentifier("yellow");
-SimpleIdentifier greenId = new SimpleIdentifier("green");
+    // add the states
+    final var newState = model.addState("new");
+    final var waiting = model.addState("waiting");
+    final var searching = model.addState("searching");
+    final var following = model.addState("following");
+    final var finished = model.add * * * * State("finished");
 
-ConcreteState<SimpleIdentifier> redState = new ConcreteState<>(redId);
-ConcreteState<SimpleIdentifier> yellowState = new ConcreteState<>(yellowId);
-ConcreteState<SimpleIdentifier> greenState = new ConcreteState<>(greenId);
+    // these are guards which prevent the token to transition to the next state
+    final var found = new AtomicBoolean(false);
+    final var caught = new AtomicBoolean(false);
+    final var startSearch = new AtomicBoolean(false);
 
-// Add states to the model
-model.
+    // link all states
+    model.addTransition(newState, waiting, () -> true, "start");
+    model.addTransition(waiting, searching, startSearch::get, "search");
+    model.addTransition(waiting, finished, found::get, "found");
+    model.addTransition(searching, following, caught::get, "follow");
+    model.addTransition(following, waiting, () -> true, "searchagain");
 
-addState(redState);
-model.
+    // create a start token at any state
+    final var token = new Token<>(newState, model);
 
-addState(yellowState);
-model.
+    final var machine = new StateMachine<String>();
+    final var waitingToken = machine.execute(token);
+    // State transition from new to waiting is immediate,  the next states are all blocked by th guards
+    checkState(newToken, waiting);
 
-addState(greenState);
-
-// Define transition guards
-BooleanSupplier alwaysTrue = () -> true;
-
-// Add transitions
-model.
-
-addTransition(redState, greenState, alwaysTrue, new SimpleIdentifier("redToGreen"));
-        model.
-
-addTransition(greenState, yellowState, alwaysTrue, new SimpleIdentifier("greenToYellow"));
-        model.
-
-addTransition(yellowState, redState, alwaysTrue, new SimpleIdentifier("yellowToRed"));
-
-// Create a token starting at the red state
-ConcreteToken<SimpleIdentifier> token = new ConcreteToken<>(redState, model);
-
-// Create a state machine
-GuardedStateMachine<SimpleIdentifier> stateMachine = new GuardedStateMachine<>();
-
-// Execute the state machine
-Token<SimpleIdentifier> finalToken = stateMachine.execute(token);
-
-// The token should now be in the red state after going through the cycle
-System.out.
-
-println("Final state: "+finalToken.state().
-
-id());
+    // enable transition startSearch to State searching
+    startSearch.set(true);
+    final var searchToken = machine.execute(waitingToken);
+    ...
+}
 ```
 
-## API Documentation
+### State Diagram
 
-### Core Interfaces
-
-- `StateMachine<I>`: The main interface for executing state machines
-- `State<I>`: Represents a state in the state machine
-- `Transition<I>`: Represents a transition between states
-- `Token<I>`: Represents the current state and model
-- `StateModel<I>`: Represents the structure of a state machine
-- `Identifier`: Marker interface for state and transition identifiers
-
-### Implementation Classes
-
-- `GuardedStateMachine<I>`: Implementation of StateMachine that respects transition guards
-- `ConcreteState<I>`: Basic implementation of the State interface
-- `ConcreteStateModel<I>`: Basic implementation of the StateModel interface
-- `ConcreteToken<I>`: Basic implementation of the Token interface
-- `ConcreteTransition<I>`: Basic implementation of the Transition interface
-- `SimpleIdentifier`: Basic implementation of the Identifier interface
+```plantuml
+@startuml
+state new
+state waiting
+state searching
+state following
+state finished
+new --> waiting : start
+waiting --> searching : search
+waiting --> finished : found
+searching --> following : follow
+following --> waiting : searchagain
+@enduml
+``
 
 ## License
 

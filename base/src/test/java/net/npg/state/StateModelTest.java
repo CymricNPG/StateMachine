@@ -43,6 +43,22 @@ class StateModelTest {
     }
 
     @Test
+    void testCreateToken() {
+        final var stateModel = new StateModel<>(MODEL_ID);
+        final var state1 = stateModel.addState(ID1);
+        final var token = stateModel.createToken(state1);
+        assertEquals(stateModel, token.model());
+        assertEquals(state1, token.state());
+    }
+
+    @Test
+    void testCreateInvalidToken() {
+        final var stateModel = new StateModel<>(MODEL_ID);
+        final var state1 = new State<>(ID1);
+        assertThrows(IllegalArgumentException.class, () -> stateModel.createToken(state1));
+    }
+
+    @Test
     void testAddTransition_success() {
         final var stateModel = new StateModel<>(MODEL_ID);
         final var state1 = stateModel.addState(ID1);

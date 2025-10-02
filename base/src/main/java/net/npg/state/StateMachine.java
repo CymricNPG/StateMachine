@@ -22,11 +22,39 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/// Represents the core execution engine for state machines, responsible for processing
+/// transitions between states based on the current token context.
+///
+/// This class provides the primary `execute` method that processes state transitions
+/// according to the defined rules. It uses the [Token] to track the current state
+/// and model, and ensures transitions are executed safely with validation.
+///
+/// Classes in this package are designed to be used as the central control logic
+/// for state machine execution.
+///
+/// @param <I> The type of the state identifier (e.g., String, Integer)
+/// @see Token
+/// @see Transition
+/// @see StateModel
 public class StateMachine<I> {
     private static final Logger LOGGER = Logger.getLogger(StateMachine.class.getName());
 
+    /// Executes the state machine from the given token, processing enabled transitions
+    /// until a state is reached which has no enabled transitions.
+    ///
+    /// This method:
+    /// 1. Validates the input token
+    /// 2. Continuously checks for enabled transitions from the current state
+    /// 3. Processes the first enabled transition, updating the token's state
+    /// 4. Returns when no more transitions are enabled
+    /// 5. Throws an exception if multiple transitions are enabled simultaneously
+    ///
+    /// @param token The starting point for execution, containing the current state and model
+    /// @return The final token after all enabled transitions have been processed
+    /// @throws IllegalStateException if multiple transitions are enabled from the same state
+    /// @throws NullPointerException  if the input token is null
     public Token<I> execute(final Token<I> token) {
-        Objects.requireNonNull(token);
+        Objects.requireNonNull(token, "token cannot be null");
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.finest("Starting execution from state: " + token.state());
         }

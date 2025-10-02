@@ -21,13 +21,23 @@ package net.npg.state;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
+/// Represents a transition between states in a state machine, encapsulating the transition's
+/// identifier, source and target states, and a guard condition that determines when the
+/// transition is allowed.
+///
+/// This record is part of the StateMachine framework and follows the GNU Lesser General
+/// Public License (LGPL) v3 or later. It provides immutable access to transition properties
+/// and includes validation for all fields.
+///
+/// @param <I> The type of the state identifier (e.g., String, Integer)
+/// @see State
+/// @see StateModel
 public record Transition<I>(
         I id,
         State<I> source,
         State<I> target,
         BooleanSupplier guard
 ) {
-
     public Transition {
         Objects.requireNonNull(id, "id must not be null");
         Objects.requireNonNull(source, "source must not be null");
@@ -35,7 +45,14 @@ public record Transition<I>(
         Objects.requireNonNull(guard, "guard must not be null");
     }
 
-    public boolean canTraverse() {
+    /// Determines if the transition can be traversed based on the guard condition.
+    ///
+    /// This method evaluates the [BooleanSupplier] associated with the transition
+    /// to check if the transition is allowed. The result is determined by calling
+    /// [BooleanSupplier#getAsBoolean()].
+    ///
+    /// @return `true` if the transition is allowed, `false` otherwise
+    boolean canTraverse() {
         return guard.getAsBoolean();
     }
 

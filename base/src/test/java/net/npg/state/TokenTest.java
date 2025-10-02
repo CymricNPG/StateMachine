@@ -44,7 +44,7 @@ class TokenTest {
         final State<String> newState = mock(State.class);
         final StateModel<String> model = mock(StateModel.class);
 
-        when(model.states()).thenReturn(List.of(initialState, newState));
+        when(model.contains(newState)).thenReturn(true);
 
         final Token<String> token = new Token<>(initialState, model);
 

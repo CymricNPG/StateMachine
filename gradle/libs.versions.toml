@@ -1,6 +1,6 @@
 [versions]
-junit = "5.10.0"
-mockito = "5.17.0"
+junit = "6.0.0"
+mockito = "5.20.0"
 
 [libraries]
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
