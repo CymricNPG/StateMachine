@@ -1,12 +1,12 @@
 # StateMachine
 
-(Warning: AI Playground)
+(Warning: partly AI Playground)
 
 A minimal state machine implementation in Java.
 
 ## Overview
 
-StateMachine is a library that provides a framework for implementing state machines in Java applications. It offers a clean and easy PI for defining states,
+StateMachine is a library that provides a framework for implementing state machines in Java applications. It offers a clean and easy API for defining states,
 transitions, and the rules that govern state changes.
 
 ## Features
