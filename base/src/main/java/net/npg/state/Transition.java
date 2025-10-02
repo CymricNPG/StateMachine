@@ -43,6 +43,8 @@ public record Transition<I>(
     public String toString() {
         return "Transition{" +
                 "id=" + id +
+                ", source=" + source.id() +
+                ", target=" + target.id() +
                 '}';
     }
 }

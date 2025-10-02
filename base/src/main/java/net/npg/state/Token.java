@@ -27,7 +27,7 @@ public record Token<I>(State<I> state, StateModel<I> model) {
         Objects.requireNonNull(model, "model cannot be null");
     }
 
-    public Token<I> update(final State<I> newState) {
+    Token<I> update(final State<I> newState) {
         Objects.requireNonNull(newState);
         if (!model.states().contains(newState)) {
             throw new IllegalArgumentException("State " + newState + " not part of model " + model);

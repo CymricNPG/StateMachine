@@ -19,6 +19,7 @@
 package net.npg.state;
 
 import java.util.Objects;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class StateMachine<I> {
@@ -26,7 +27,9 @@ public class StateMachine<I> {
 
     public Token<I> execute(final Token<I> token) {
         Objects.requireNonNull(token);
-        LOGGER.info("Starting execution from state: " + token.state());
+        if (LOGGER.isLoggable(Level.FINEST)) {
+            LOGGER.finest("Starting execution from state: " + token.state());
+        }
         var workToken = token;
         while (true) {
             // Check for enabled transitions
@@ -36,17 +39,23 @@ public class StateMachine<I> {
                     .toList();
 
             if (enabledTransitions.isEmpty()) {
-                LOGGER.info("No more transitions enabled from state: " + workToken.state());
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.finest("No currently enabled transitions from state: " + workToken.state());
+                }
                 return workToken;
             }
             if (enabledTransitions.size() > 1) {
                 throw new IllegalStateException("Multiple transitions enabled from state: " + workToken.state());
             }
             final var enabledTransition = enabledTransitions.getFirst();
-            LOGGER.info("Transition found from state " + workToken.state() + " : " + enabledTransition);
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.finest("Transition found from state " + workToken.state() + " : " + enabledTransition);
+            }
             final var newState = enabledTransition.target();
             workToken = workToken.update(newState);
-            LOGGER.info("Moved to state: " + workToken.state());
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.finest("Moved to state: " + workToken.state());
+            }
         }
     }
 }
