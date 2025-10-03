@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 /// Represents a state machine model, encapsulating its unique identifier, states, and transitions.
 /// This record serves as the core structure for defining state machines, providing methods to
@@ -68,13 +69,36 @@ public record StateModel<I>(
     /// @throws NullPointerException if the provided ID is null
     public State<I> addState(final I id) {
         Objects.requireNonNull(id, "id must not be null");
+        checkStateIdExists(id);
+        final var state = new State<>(id);
+        states.add(state);
+        return state;
+    }
+
+    /// Adds a new state to this state model.
+    ///
+    /// This method creates a new [State] with the specified ID, ensures it is non-null,
+    /// and adds it to the model's state collection. The state is returned for further configuration.
+    ///
+    /// @param id            The identifier for the new state
+    /// @param stateListener a stateListener which is called when a token reaches this state
+    /// @return The newly created state
+    /// @throws NullPointerException if the provided ID is null
+    public State<I> addState(final I id, final Consumer<State<I>> stateListener) {
+        Objects.requireNonNull(id, "id must not be null");
+        Objects.requireNonNull(stateListener, "stateListener must not be null");
+        checkStateIdExists(id);
+        final var state = new State<>(id, stateListener);
+        states.add(state);
+        return state;
+    }
+    
+    private void checkStateIdExists(final I id) {
         if (states.stream().map(State::id).anyMatch(x -> x.equals(id))) {
             throw new IllegalArgumentException("State with id " + id + " already exists");
         }
-        final var state = new State<>(id);
-        states.add(Objects.requireNonNull(state));
-        return state;
     }
+
 
     /// Adds a new transition between two states in this model.
     ///
@@ -98,21 +122,21 @@ public record StateModel<I>(
         if (!contains(fromState) || !contains(toState)) {
             throw new IllegalArgumentException("Both states (" + fromState + " -> " + toState + ") must be from the current model: " + id);
         }
-        if (checkTransitionIdExists(transitionId)) {
-            throw new IllegalArgumentException("Transition with id " + transitionId + " already exists");
-        }
+        checkTransitionIdExists(transitionId);
         final var transition = new Transition<>(transitionId, fromState, toState, guard);
         fromState.addOutgoingTransition(transition);
         toState.addIncomingTransition(transition);
         return transition;
     }
 
-    private boolean checkTransitionIdExists(final I transitionId) {
+    private void checkTransitionIdExists(final I transitionId) {
         if (states().stream().flatMap(s -> s.outgoingTransitions().stream()).anyMatch(t -> t.id().equals(transitionId))) {
-            return true;
+            throw new IllegalArgumentException("Transition with id " + transitionId + " already exists");
         }
         // should be not necessary, all incoming transitions should have exactly one outgoing transition
-        return states().stream().flatMap(s -> s.incomingTransitions().stream()).anyMatch(t -> t.id().equals(transitionId));
+        if (states().stream().flatMap(s -> s.incomingTransitions().stream()).anyMatch(t -> t.id().equals(transitionId))) {
+            throw new IllegalArgumentException("Transition with id " + transitionId + " already exists");
+        }
     }
 
     /// Creates an initial [Token] starting at a given state in this [StateModel]

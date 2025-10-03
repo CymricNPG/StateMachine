@@ -20,8 +20,11 @@ package net.npg.state;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static net.npg.state.Ids.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StateMachineTest {
 
@@ -60,5 +63,28 @@ class StateMachineTest {
         final var resultToken = StateMachine.execute(token);
 
         assertEquals(state1, resultToken.state());
+    }
+
+    @Test
+    void testStateListenerCalled() {
+        final var model = new StateModel<>(MODEL_ID);
+        final var state1 = model.addState(ID1);
+        final var called = new AtomicBoolean(false);
+        final var state2 = model.addState(ID2, (s) -> called.set(true));
+        model.addTransition(state1, state2, () -> true, TRANS_ID);
+        new StateMachine<>(model, state1).execute();
+        assertTrue(called.get());
+    }
+
+    @Test
+    void testStateListenerCalled_withException() {
+        final var model = new StateModel<>(MODEL_ID);
+        final var state1 = model.addState(ID1);
+        final var state2 = model.addState(ID2, (s) -> {
+            throw new RuntimeException("ignore");
+        });
+        model.addTransition(state1, state2, () -> true, TRANS_ID);
+        final var nextState = new StateMachine<>(model, state1).execute();
+        assertEquals(state2, nextState);
     }
 }

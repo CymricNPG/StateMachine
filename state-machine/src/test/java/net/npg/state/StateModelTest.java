@@ -77,10 +77,19 @@ class StateModelTest {
     }
 
     @Test
-    void testAddStateFail() {
-        final StateModel<SimpleIdentifier> stateModel = new StateModel<>(MODEL_ID);
+    void testAddLListenerState_success() {
+        final var stateModel = new StateModel<>(MODEL_ID);
+        final var state = stateModel.addState(ID1, s -> {
+        });
+        assertNotNull(state);
+        assertTrue(state.stateListener().isPresent());
+    }
 
-        Assertions.assertThrows(NullPointerException.class, () -> stateModel.addState(null));
+    @Test
+    void testAddLListenerState_fail() {
+        final StateModel<SimpleIdentifier> stateModel = new StateModel<>(MODEL_ID);
+        Assertions.assertThrows(NullPointerException.class, () -> stateModel.addState(null, s -> {
+        }));
     }
 
     @Test

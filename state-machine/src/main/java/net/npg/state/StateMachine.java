@@ -104,6 +104,11 @@ public class StateMachine<I> {
             if (LOGGER.isLoggable(Level.FINEST)) {
                 LOGGER.finest("Moved to state: " + workToken.state());
             }
+            try {
+                newState.stateListener().ifPresent(l -> l.accept(newState));
+            } catch (final Exception e) {
+                LOGGER.log(Level.WARNING, "Caught exception while processing state transition: " + workToken.state(), e);
+            }
         }
     }
 }

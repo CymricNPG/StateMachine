@@ -21,6 +21,8 @@ package net.npg.state;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /// Represents a state in a state machine, containing its identifier and transition relationships.
 /// This record encapsulates the core properties of a state, including its unique identifier
@@ -35,12 +37,14 @@ import java.util.Objects;
 /// @param id                  a unique identifier for this state
 /// @param outgoingTransitions a collection of outgoing transitions
 /// @param incomingTransitions a collection of incoming transitions
+/// @param stateListener       an optional state listener which is called if a token reaches this state
 /// @see Transition
 /// @see StateModel
 public record State<I>(
         I id,
         Collection<Transition<I>> outgoingTransitions,
-        Collection<Transition<I>> incomingTransitions
+        Collection<Transition<I>> incomingTransitions,
+        Optional<Consumer<State<I>>> stateListener
 ) {
     /// Constructs a new state with the specified identifier and empty transition collections.
     ///
@@ -51,7 +55,20 @@ public record State<I>(
     /// @param id The unique identifier for the state
     /// @throws NullPointerException if the provided identifier is null
     State(final I id) {
-        this(Objects.requireNonNull(id), new ArrayList<>(), new ArrayList<>());
+        this(Objects.requireNonNull(id), new ArrayList<>(), new ArrayList<>(), Optional.empty());
+    }
+
+    /// Constructs a new state with the specified identifier, empty transition collections and a state listener.
+    ///
+    /// The resulting state has no outgoing or incoming transitions by default. Transitions
+    /// can be added using the [#addOutgoingTransition(Transition)] and
+    /// [#addIncomingTransition(Transition)] methods.
+    ///
+    /// @param stateListener a stateListener which is called when a token reaches this state
+    /// @param id            The unique identifier for the state
+    /// @throws NullPointerException if the provided identifier is null
+    State(final I id, final Consumer<State<I>> stateListener) {
+        this(Objects.requireNonNull(id), new ArrayList<>(), new ArrayList<>(), Optional.of(Objects.requireNonNull(stateListener)));
     }
 
     /// Ensure that all fields are set
@@ -59,6 +76,7 @@ public record State<I>(
         Objects.requireNonNull(id, "id cannot be null");
         Objects.requireNonNull(outgoingTransitions, "outgoingTransitions cannot be null");
         Objects.requireNonNull(incomingTransitions, "incomingTransitions cannot be null");
+        Objects.requireNonNull(stateListener, "stateListener cannot be null");
     }
 
     /// Adds an outgoing transition to this state.
