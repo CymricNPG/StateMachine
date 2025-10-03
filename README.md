@@ -1,8 +1,6 @@
 # StateMachine
 
-(Warning: partly AI Playground)
-
-A minimal state machine implementation in Java.
+A minimal basic state machine implementation in Java.
 
 ## Overview
 
