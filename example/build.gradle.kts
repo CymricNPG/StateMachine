@@ -2,9 +2,6 @@ plugins {
     id("java")
 }
 
-group = "net.npg"
-version = "1.0-SNAPSHOT"
-
 repositories {
     mavenCentral()
 }
@@ -16,7 +13,7 @@ java {
 }
 
 dependencies {
-    implementation(project(":base"))
+    implementation(project(":state-machine"))
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)

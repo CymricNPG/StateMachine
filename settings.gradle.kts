@@ -1,4 +1,4 @@
 rootProject.name = "StateMachine"
 
-include("base")
+include("state-machine")
 include("example")
