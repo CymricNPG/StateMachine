@@ -29,11 +29,14 @@ import java.util.Objects;
 /// `Token` record ensures null safety for both state and model fields, and provides
 /// a method to update the state while validating its existence in the model.
 ///
-/// @param <I> The type of the state identifier (e.g., String, Integer)
+/// @param <I>   The type of the state identifier (e.g., String, Integer)
+/// @param state the current [State] of this [Token]
+/// @param model the [StateModel] to which this token belongs
 /// @see State
 /// @see StateModel
 public record Token<I>(State<I> state, StateModel<I> model) {
 
+    /// Ensure that all fields are set
     public Token {
         Objects.requireNonNull(state, "state cannot be null");
         Objects.requireNonNull(model, "model cannot be null");

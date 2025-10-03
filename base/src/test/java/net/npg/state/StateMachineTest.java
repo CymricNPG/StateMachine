@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import static net.npg.state.Ids.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class GuardedStateMachineTest {
+class StateMachineTest {
 
     @Test
     void testExecuteStateMachine_success() {
@@ -32,11 +32,21 @@ class GuardedStateMachineTest {
         final var state2 = model.addState(ID2);
         model.addTransition(state1, state2, () -> true, TRANS_ID);
         final var token = new Token<>(state1, model);
-        final var stateMachine = new StateMachine<SimpleIdentifier>();
 
-        final var resultToken = stateMachine.execute(token);
+        final var resultToken = StateMachine.execute(token);
 
         assertEquals(state2, resultToken.state());
+    }
+
+    @Test
+    void testExecuteObjectStateMachine_success() {
+        final var model = new StateModel<>(MODEL_ID);
+        final var state1 = model.addState(ID1);
+        final var state2 = model.addState(ID2);
+        model.addTransition(state1, state2, () -> true, TRANS_ID);
+        final var sut = new StateMachine<>(model, state1);
+
+        assertEquals(state2, sut.execute());
     }
 
     @Test
@@ -47,8 +57,7 @@ class GuardedStateMachineTest {
         final var state2 = model.addState(ID2);
         model.addTransition(state1, state2, () -> false, TRANS_ID);
         final var token = new Token<>(state1, model);
-        final var stateMachine = new StateMachine<SimpleIdentifier>();
-        final var resultToken = stateMachine.execute(token);
+        final var resultToken = StateMachine.execute(token);
 
         assertEquals(state1, resultToken.state());
     }

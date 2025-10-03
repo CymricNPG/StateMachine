@@ -17,6 +17,9 @@
  */
 package net.npg.state;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 /// Utility class for generating PlantUML diagrams and markdown representations of state models.
 /// This class provides static methods to convert [StateModel] instances into PlantUML syntax
 /// and markdown-formatted PlantUML code blocks.
@@ -42,8 +45,12 @@ public final class RenderPlantUML {
 
         model.states()
                 .forEach(state -> diagram.append("state ").append(state.id()).append("\n"));
+        final var transitions = model.states().stream()
+                .map(State::outgoingTransitions)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
 
-        for (final Transition<?> transition : model.transitions()) {
+        for (final var transition : transitions) {
             diagram.append(transition.source().id())
                     .append(" --> ")
                     .append(transition.target().id())

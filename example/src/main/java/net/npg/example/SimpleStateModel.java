@@ -31,15 +31,14 @@ public class SimpleStateModel {
 
         final var token = model.createToken(newState);
 
-        final var machine = new StateMachine<String>();
-        final var newToken = machine.execute(token);
+        final var newToken = StateMachine.execute(token);
         checkState(newToken, waiting);
         startSearch.set(true);
         found.set(false);
-        final var foundToken = machine.execute(newToken);
+        final var foundToken = StateMachine.execute(newToken);
         checkState(foundToken, searching);
         found.set(false);
-        final var followToken = machine.execute(foundToken);
+        final var followToken = StateMachine.execute(foundToken);
         checkState(followToken, following);
     }
 

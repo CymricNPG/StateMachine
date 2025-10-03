@@ -32,7 +32,6 @@ class StateModelTest {
     void testCreateEmptyStateModel_success() {
         final var stateModel = new StateModel<>(MODEL_ID);
         assertTrue(stateModel.states().isEmpty());
-        assertTrue(stateModel.transitions().isEmpty());
     }
 
     @Test
@@ -67,7 +66,6 @@ class StateModelTest {
         final var guard = (BooleanSupplier) () -> true;
         stateModel.addTransition(state1, state2, guard, TRANS_ID);
 
-        assertEquals(1, stateModel.transitions().size());
         assertFalse(state1.outgoingTransitions().isEmpty());
         assertFalse(state2.incomingTransitions().isEmpty());
     }
@@ -92,4 +90,48 @@ class StateModelTest {
         Assertions.assertThrows(NullPointerException.class,
                 () -> stateModel.addTransition(null, null, () -> true, null));
     }
+
+    @Test
+    void addCrossTransition_fail() {
+        final var stateModel = new StateModel<>(MODEL_ID);
+        final var stateModel2 = new StateModel<>(MODEL_ID2);
+        final var state1 = stateModel.addState(ID1);
+        final var state2 = stateModel2.addState(ID2);
+        assertThrows(IllegalArgumentException.class, () -> stateModel.addTransition(state1, state2, () -> true, TRANS_ID));
+    }
+
+    @Test
+    void addCrossTransition_failreverse() {
+        final var stateModel = new StateModel<>(MODEL_ID);
+        final var stateModel2 = new StateModel<>(MODEL_ID2);
+        final var state1 = stateModel.addState(ID1);
+        final var state2 = stateModel2.addState(ID2);
+        assertThrows(IllegalArgumentException.class, () -> stateModel.addTransition(state2, state1, () -> true, TRANS_ID));
+    }
+
+    @Test
+    void addDuplicateState() {
+        final var stateModel = new StateModel<>(MODEL_ID);
+        final var state1 = stateModel.addState(ID1);
+        assertThrows(IllegalArgumentException.class, () -> stateModel.addState(ID1));
+    }
+
+    @Test
+    void addDuplicateTransition() {
+        final var stateModel = new StateModel<>(MODEL_ID);
+        final var state1 = stateModel.addState(ID1);
+        final var state2 = stateModel.addState(ID2);
+        stateModel.addTransition(state1, state2, () -> true, TRANS_ID);
+        assertThrows(IllegalArgumentException.class, () -> stateModel.addTransition(state1, state2, () -> true, TRANS_ID));
+    }
+
+    @Test
+    void addDuplicateTransitionReverse() {
+        final var stateModel = new StateModel<>(MODEL_ID);
+        final var state1 = stateModel.addState(ID1);
+        final var state2 = stateModel.addState(ID2);
+        stateModel.addTransition(state2, state1, () -> true, TRANS_ID);
+        assertThrows(IllegalArgumentException.class, () -> stateModel.addTransition(state1, state2, () -> true, TRANS_ID));
+    }
+
 }

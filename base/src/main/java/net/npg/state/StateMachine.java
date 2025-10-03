@@ -39,6 +39,26 @@ import java.util.logging.Logger;
 public class StateMachine<I> {
     private static final Logger LOGGER = Logger.getLogger(StateMachine.class.getName());
 
+    private Token<I> token;
+
+    public StateMachine(final StateModel<I> stateModel, final State<I> startState) {
+        Objects.requireNonNull(stateModel, "stateModel must not be null");
+        Objects.requireNonNull(startState, "startState must not be null");
+        token = stateModel.createToken(startState);
+    }
+
+    ///  Executes the state machine from the current state, processing enabled transitions
+    ///      until a state is reached which has no enabled transitions.
+    ///
+    /// @return The final state after all enabled transitions have been processed
+    /// @throws IllegalStateException if multiple transitions are enabled from the same state
+    public State<I> execute() {
+        assert token != null;
+        token = execute(token);
+        return token.state();
+    }
+
+
     /// Executes the state machine from the given token, processing enabled transitions
     /// until a state is reached which has no enabled transitions.
     ///
@@ -53,7 +73,7 @@ public class StateMachine<I> {
     /// @return The final token after all enabled transitions have been processed
     /// @throws IllegalStateException if multiple transitions are enabled from the same state
     /// @throws NullPointerException  if the input token is null
-    public Token<I> execute(final Token<I> token) {
+    public static <I> Token<I> execute(final Token<I> token) {
         Objects.requireNonNull(token, "token cannot be null");
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.finest("Starting execution from state: " + token.state());

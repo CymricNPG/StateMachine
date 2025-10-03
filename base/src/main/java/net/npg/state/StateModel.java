@@ -31,14 +31,15 @@ import java.util.function.BooleanSupplier;
 /// `StateModel` record ensures null safety for all fields and provides utility methods
 /// for managing state and transition relationships.
 ///
-/// @param <I> The type of the state identifier (e.g., String, Integer)
+/// @param <I>    The type of the state identifier (e.g., String, Integer)
+/// @param states a collection of all states in this model
+/// @param id     a unique identifier
 /// @see State
 /// @see Transition
 /// @see Token
 public record StateModel<I>(
         I id,
-        Collection<State<I>> states,
-        Collection<Transition<I>> transitions
+        Collection<State<I>> states
 ) {
     /// Constructs a new state model with the specified identifier and empty state/transition collections.
     ///
@@ -48,13 +49,13 @@ public record StateModel<I>(
     /// @param id The unique identifier for the state model
     /// @throws NullPointerException if the provided ID is null
     public StateModel(final I id) {
-        this(id, new ArrayList<>(), new ArrayList<>());
+        this(id, new ArrayList<>());
     }
 
+    /// Ensure that all fields are set
     public StateModel {
         Objects.requireNonNull(id, "id must not be null");
         Objects.requireNonNull(states, "states must not be null");
-        Objects.requireNonNull(transitions, "transitions must not be null");
     }
 
     /// Adds a new state to this state model.
@@ -66,7 +67,11 @@ public record StateModel<I>(
     /// @return The newly created state
     /// @throws NullPointerException if the provided ID is null
     public State<I> addState(final I id) {
-        final var state = new State<>(Objects.requireNonNull(id, "id must not be null"));
+        Objects.requireNonNull(id, "id must not be null");
+        if (states.stream().map(State::id).anyMatch(x -> x.equals(id))) {
+            throw new IllegalArgumentException("State with id " + id + " already exists");
+        }
+        final var state = new State<>(id);
         states.add(Objects.requireNonNull(state));
         return state;
     }
@@ -90,11 +95,24 @@ public record StateModel<I>(
         Objects.requireNonNull(toState, "toState must not be null");
         Objects.requireNonNull(guard, "guard must not be null");
         Objects.requireNonNull(transitionId, "transitionId must not be null");
+        if (!contains(fromState) || !contains(toState)) {
+            throw new IllegalArgumentException("Both states (" + fromState + " -> " + toState + ") must be from the current model: " + id);
+        }
+        if (checkTransitionIdExists(transitionId)) {
+            throw new IllegalArgumentException("Transition with id " + transitionId + " already exists");
+        }
         final var transition = new Transition<>(transitionId, fromState, toState, guard);
         fromState.addOutgoingTransition(transition);
         toState.addIncomingTransition(transition);
-        transitions().add(transition);
         return transition;
+    }
+
+    private boolean checkTransitionIdExists(final I transitionId) {
+        if (states().stream().flatMap(s -> s.outgoingTransitions().stream()).anyMatch(t -> t.id().equals(transitionId))) {
+            return true;
+        }
+        // should be not necessary, all incoming transitions should have exactly one outgoing transition
+        return states().stream().flatMap(s -> s.incomingTransitions().stream()).anyMatch(t -> t.id().equals(transitionId));
     }
 
     /// Creates an initial [Token] starting at a given state in this [StateModel]

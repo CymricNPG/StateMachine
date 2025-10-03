@@ -31,7 +31,10 @@ import java.util.Objects;
 /// the record itself is immutable, the transition collections provide mutable operations
 /// for adding transitions dynamically.
 ///
-/// @param <I> The type of the state identifier (e.g., String, Integer)
+/// @param <I>                 The type of the state identifier (e.g., String, Integer)
+/// @param id                  a unique identifier for this state
+/// @param outgoingTransitions a collection of outgoing transitions
+/// @param incomingTransitions a collection of incoming transitions
 /// @see Transition
 /// @see StateModel
 public record State<I>(
@@ -51,6 +54,7 @@ public record State<I>(
         this(Objects.requireNonNull(id), new ArrayList<>(), new ArrayList<>());
     }
 
+    /// Ensure that all fields are set
     public State {
         Objects.requireNonNull(id, "id cannot be null");
         Objects.requireNonNull(outgoingTransitions, "outgoingTransitions cannot be null");
@@ -85,6 +89,22 @@ public record State<I>(
             throw new IllegalArgumentException("Transition " + transition + "  must end in this state:" + this);
         }
         incomingTransitions.add(transition);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final State<?> state = (State<?>) o;
+        return Objects.equals(id, state.id)
+                && Objects.equals(outgoingTransitions, state.outgoingTransitions)
+                && Objects.equals(incomingTransitions, state.incomingTransitions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, outgoingTransitions, incomingTransitions);
     }
 
     @Override

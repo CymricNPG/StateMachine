@@ -29,7 +29,11 @@ import java.util.function.BooleanSupplier;
 /// Public License (LGPL) v3 or later. It provides immutable access to transition properties
 /// and includes validation for all fields.
 ///
-/// @param <I> The type of the state identifier (e.g., String, Integer)
+/// @param <I>    The type of the state identifier (e.g., String, Integer)
+/// @param guard  a guard which controls if a [Token] can follow this [Transition] to the target [State]
+/// @param id     a unique identifier
+/// @param source the start [State] of this transition
+/// @param target the end [State] of this transition
 /// @see State
 /// @see StateModel
 public record Transition<I>(
@@ -38,6 +42,7 @@ public record Transition<I>(
         State<I> target,
         BooleanSupplier guard
 ) {
+    /// Ensure that all fields are set
     public Transition {
         Objects.requireNonNull(id, "id must not be null");
         Objects.requireNonNull(source, "source must not be null");
@@ -63,5 +68,23 @@ public record Transition<I>(
                 ", source=" + source.id() +
                 ", target=" + target.id() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Transition<?> that = (Transition<?>) o;
+        return Objects.equals(id, that.id)
+                && Objects.equals(source.id(), that.source.id())
+                && Objects.equals(target.id(), that.target.id())
+                && Objects.equals(guard, that.guard);
+    }
+
+    ///  rely on the id() of the [State] to avoid a stackoverflow on call
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, source.id(), target.id(), guard);
     }
 }
