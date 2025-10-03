@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+
+  <key id="package" for="node" attr.name="package" attr.type="string"/>
+  <key id="module" for="node" attr.name="module" attr.type="string"/>
+                  
+	<key id="package" for="node" attr.name="package" attr.type="string"/>
+	<key id="label" for="node" attr.name="label" attr.type="string"/>
+	<key id="weight" for="edge" attr.name="weight" attr.type="int"/>
+    <key id="implicit" for="edge" attr.name="implicit" attr.type="boolean"/>
+
+  <graph id="G" edgedefault="directed">
+
+    <node id="47"><data key="label">StateTest</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">unknown</data>
+</node>
+    <node id="7"><data key="label">State</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">StateMachine.base.main</data>
+</node>
+    <node id="35"><data key="label">GuardedStateMachineTest</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">unknown</data>
+</node>
+    <node id="4"><data key="label">Ids</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">StateMachine.base.test</data>
+</node>
+    <node id="9"><data key="label">Token</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">StateMachine.base.main</data>
+</node>
+    <node id="11"><data key="label">StateModel</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">StateMachine.base.main</data>
+</node>
+    <node id="25"><data key="label">StateModelTest</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">unknown</data>
+</node>
+    <node id="42"><data key="label">TransitionTest</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">unknown</data>
+</node>
+    <node id="2"><data key="label">SimpleIdentifier</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">StateMachine.base.main</data>
+</node>
+    <node id="1"><data key="label">SimpleIdentifierTest</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">unknown</data>
+</node>
+    <node id="21"><data key="label">StateMachine</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">StateMachine.base.main</data>
+</node>
+    <node id="6"><data key="label">Transition</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">StateMachine.base.main</data>
+</node>
+    <node id="15"><data key="label">TokenTest</data>
+   <data key="package">net.npg.state</data>
+   <data key="module">unknown</data>
+</node>
+    <node id="30"><data key="label">SimpleStateModel</data>
+   <data key="package">net.npg.example</data>
+   <data key="module">unknown</data>
+</node>
+    <edge id="3" source="1" target="2">
+      <data key="weight">7</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="5" source="1" target="4">
+      <data key="weight">2</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="8" source="6" target="7">
+      <data key="weight">2</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="10" source="9" target="7">
+      <data key="weight">2</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="12" source="9" target="11">
+      <data key="weight">2</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="13" source="4" target="2">
+      <data key="weight">12</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="14" source="4" target="7">
+      <data key="weight">4</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="16" source="15" target="2">
+      <data key="weight">6</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="17" source="15" target="7">
+      <data key="weight">12</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="18" source="15" target="4">
+      <data key="weight">2</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="19" source="15" target="9">
+      <data key="weight">13</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="20" source="15" target="11">
+      <data key="weight">9</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="22" source="21" target="6">
+      <data key="weight">4</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="23" source="21" target="7">
+      <data key="weight">2</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="24" source="21" target="9">
+      <data key="weight">5</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="26" source="25" target="2">
+      <data key="weight">15</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="27" source="25" target="7">
+      <data key="weight">5</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="28" source="25" target="4">
+      <data key="weight">10</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="29" source="25" target="11">
+      <data key="weight">16</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="31" source="30" target="7">
+      <data key="weight">6</data>
+      <data key="implicit">false</data>
+    </edge>
+    <edge id="32" source="30" target="9">
+      <data key="weight">6</data>
+      <data key="implicit">false</data>
+    </edge>
+    <edge id="33" source="30" target="11">
+      <data key="weight">2</data>
+      <data key="implicit">false</data>
+    </edge>
+    <edge id="34" source="30" target="21">
+      <data key="weight">2</data>
+      <data key="implicit">false</data>
+    </edge>
+    <edge id="36" source="35" target="2">
+      <data key="weight">18</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="37" source="35" target="7">
+      <data key="weight">4</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="38" source="35" target="4">
+      <data key="weight">8</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="39" source="35" target="9">
+      <data key="weight">7</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="40" source="35" target="11">
+      <data key="weight">6</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="41" source="35" target="21">
+      <data key="weight">5</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="43" source="42" target="2">
+      <data key="weight">12</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="44" source="42" target="6">
+      <data key="weight">9</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="45" source="42" target="7">
+      <data key="weight">6</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="46" source="42" target="4">
+      <data key="weight">13</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="48" source="47" target="2">
+      <data key="weight">16</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="49" source="47" target="6">
+      <data key="weight">4</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="50" source="47" target="7">
+      <data key="weight">17</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="51" source="47" target="4">
+      <data key="weight">8</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="52" source="7" target="6">
+      <data key="weight">6</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="53" source="11" target="6">
+      <data key="weight">5</data>
+      <data key="implicit">true</data>
+    </edge>
+    <edge id="54" source="11" target="7">
+      <data key="weight">9</data>
+      <data key="implicit">true</data>
+    </edge>
+
+  </graph>
+</graphml>
+
+            
