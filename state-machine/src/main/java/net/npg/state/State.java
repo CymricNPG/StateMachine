@@ -92,22 +92,6 @@ public record State<I>(
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        final State<?> state = (State<?>) o;
-        return Objects.equals(id, state.id)
-                && Objects.equals(outgoingTransitions, state.outgoingTransitions)
-                && Objects.equals(incomingTransitions, state.incomingTransitions);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, outgoingTransitions, incomingTransitions);
-    }
-
-    @Override
     public String toString() {
         return "State{" +
                 "id=" + id +
